@@ -139,6 +139,7 @@
   }
   .card-interests{color:var(--ink-soft);font-size:.92rem;font-weight:300;}
   .card-note{color:var(--ink-faint);font-size:.86rem;font-style:italic;}
+  .empty-note{color:var(--ink-faint);font-style:italic;font-size:.95rem;padding:.2rem 0 .4rem;}
   .card-links{margin-top:auto;padding-top:.5rem;display:flex;gap:.75rem;align-items:center;}
   .card-links a{color:var(--ink-faint);display:inline-flex;transition:color .2s,transform .2s;}
   .card-links a:hover{color:var(--accent);transform:translateY(-2px);}
@@ -202,6 +203,7 @@ const LAB_INFO = {
 const UI = {
   toggle:     {zh:"EN", en:"中文"},        // 切换按钮上显示的文字(即将切到的语言)
   emailLabel: {zh:"联系邮箱", en:"Email"},
+  none:       {zh:"暂无", en:"None at present"},
 };
 
 /* 分组顺序与中英文名称。没有成员的分组会自动隐藏。 */
@@ -221,7 +223,7 @@ const CATEGORIES = [
    照片:放进同目录 photos/ 文件夹,photo 写 "photos/文件名.jpg";留空显示首字头像。 */
 const MEMBERS = [
   {
-    category:"导师", name:"Peter Xu", nameEn:"Weiliang Xu",
+    category:"导师", name:{zh:"徐卫良", en:"Peter Xu"}, nameEn:"Weiliang Xu",
     title:{zh:"机电工程讲席教授 · 博士生导师", en:"Chair Professor in Mechatronics · PhD Supervisor"},
     interests:{zh:"软体机器人 · 消化机器人(咀嚼 / 吞咽 / 食道 / 胃) · 软组织操控 · 医疗与食品机电系统",
                en:"Soft Robotics · Digestion Robotics (chewing / swallowing / esophagus / stomach) · Soft-tissue Manipulation · Mechatronics for Medicine & Food"},
@@ -250,7 +252,7 @@ const MEMBERS = [
     photo:"photos/MartinStommel.jpg",
   },
   {
-    category:"共同导师", name:"Bangxiang Chen",
+    category:"共同导师", name:{zh:"陈邦祥", en:"Bangxiang Chen"},
     title:{zh:"西交利物浦大学 · 助理教授", en:"Assistant Professor, XJTLU"},
     interests:{zh:"咀嚼机器人 · 食品质构分析", en:"Chewing Robotics · Food Texture Analysis"},
     email:"Bangxiang.Chen@xjtlu.edu.cn",
@@ -258,51 +260,38 @@ const MEMBERS = [
     photo:"photos/BangxiangChen.jpg",
   },
 
-  // —— 博士后(示例,请替换为真人或删除整段) ——
-  {
-    category:"博士后", name:{zh:"示例博士后 · 请替换", en:"Example Postdoc · replace me"},
-    title:{zh:"博士后研究员", en:"Postdoctoral Researcher"}, year:{zh:"2024 入站", en:"Joined 2024"},
-    interests:{zh:"研究方向", en:"Research interests"},
-    email:"", photo:"",
-  },
+  // —— 博士后(暂无;有人选时把下面这行替换成完整成员对象即可) ——
+  { category:"博士后", placeholder:true },
 
   // —— 博士研究生 ——
-  { category:"博士研究生", name:"Sam Duanmu", year:{zh:"2021级",en:"2021 cohort"},
-    title:{zh:"博士研究生",en:"PhD Student"}, photo:"photos/SamDuanmu.jpg",
-    interests:{zh:"软体机器人 · 药物体外吞咽仿真",en:"Soft Robotics · In Vitro Drug Swallowing"} },
-  { category:"博士研究生", name:"Xudong Wang", year:{zh:"2021级",en:"2021 cohort"},
-    title:{zh:"博士研究生",en:"PhD Student"}, photo:"photos/XudongWang.jpg",
-    interests:{zh:"新一代咀嚼机器人",en:"Next-generation Mastication Robot"} },
-  { category:"博士研究生", name:"Shiyi Ren", year:{zh:"2022级",en:"2022 cohort"},
+  { category:"博士研究生", name:{zh:"任是屹", en:"Shiyi Ren"}, year:{zh:"2022级",en:"2022 cohort"},
     title:{zh:"博士研究生",en:"PhD Student"}, photo:"photos/ShiyiRen.jpg",
-    interests:{zh:"仿生口腔 · 体外机器人咀嚼仿真",en:"Biomimetic Oral Cavity · In Vitro Robotic Chewing"} },
+    interests:{zh:"咀嚼食物破碎的视觉量化 · 实例分割 · 机器人咀嚼",en:"Visual Quantification of Food Breakdown · Instance Segmentation · Robotic Chewing"} },
   { category:"博士研究生", name:"Isurie Akarawita", year:{zh:"2023级",en:"2023 cohort"},
     title:{zh:"博士研究生",en:"PhD Student"}, photo:"photos/IsurieAkarawita.jpg",
     interests:{zh:"机器视觉与深度学习 · 体外咀嚼过程评估",en:"Machine Vision & Deep Learning · In Vitro Chewing Assessment"} },
+  { category:"博士研究生", name:{zh:"赵润吉", en:"Runji Zhao"},
+    title:{zh:"博士研究生",en:"PhD Student"} },
+  { category:"博士研究生", name:{zh:"朱奕潼", en:"Yitong Zhu"},
+    title:{zh:"博士研究生",en:"PhD Student"} },
+  { category:"博士研究生", name:{zh:"蒋思奇", en:"Siqi Jiang"},
+    title:{zh:"博士研究生",en:"PhD Student"} },
 
-  // —— 硕士研究生(示例,请替换为真人或删除整段) ——
-  {
-    category:"硕士研究生", name:{zh:"示例硕士生 · 请替换", en:"Example Master's · replace me"},
-    title:{zh:"硕士研究生", en:"Master's Student"}, year:{zh:"2024级", en:"2024 cohort"},
-    interests:{zh:"研究方向", en:"Research interests"},
-    email:"", photo:"",
-  },
+  // —— 硕士研究生(暂无) ——
+  { category:"硕士研究生", placeholder:true },
 
-  // —— 本科生(示例,请替换为真人或删除整段) ——
-  {
-    category:"本科生", name:{zh:"示例本科生 · 请替换", en:"Example Undergraduate · replace me"},
-    title:{zh:"本科生 · 科研助理", en:"Undergraduate · Research Assistant"},
-    interests:{zh:"研究方向", en:"Research interests"},
-    email:"", photo:"",
-  },
+  // —— 本科生(暂无) ——
+  { category:"本科生", placeholder:true },
 
   // —— 已毕业校友(按毕业年份从新到旧) ——
+  { category:"已毕业", name:{zh:"端木钟汉", en:"Sam Duanmu"},      year:{zh:"2026届",en:"Class of 2026"}, photo:"photos/SamDuanmu.jpg", interests:{zh:"软体机器人 · 药物体外吞咽仿真",   en:"Soft Robotics · In Vitro Drug Swallowing"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
+  { category:"已毕业", name:{zh:"王旭东", en:"Xudong Wang"},     year:{zh:"2026届",en:"Class of 2026"}, photo:"photos/XudongWang.jpg", interests:{zh:"新一代咀嚼机器人",   en:"Next-generation Mastication Robot"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
   { category:"已毕业", name:"Q. Zhang",        year:{zh:"2023届",en:"Class of 2023"}, interests:{zh:"软体物体变形建模 · 机器人器官操控",   en:"Soft-object Deformation Modelling · Robotic Organ Manipulation"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
   { category:"已毕业", name:"S. Kazemi",       year:{zh:"2023届",en:"Class of 2023"}, interests:{zh:"软体胃模拟器 · 仿生闭环控制",       en:"Soft Gastric Simulator · Biomimetic Closed-loop Control"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
   { category:"已毕业", name:"M. Kazemzadeh",   year:{zh:"2023届",en:"Class of 2023"}, interests:{zh:"深度学习 · 纳米等离子体生物传感",    en:"Deep Learning · Nanoplasmonic Biosensing"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
   { category:"已毕业", name:"Z.X. Chen",       year:{zh:"2023届",en:"Class of 2023"}, interests:{zh:"软体桌面物体操控 · 建模与控制",     en:"Soft Robotic Table · Manipulation, Modelling & Control"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
   { category:"已毕业", name:"S. Jesna",        year:{zh:"2022届",en:"Class of 2022"}, interests:{zh:"软体食道机器人 · 吞咽体外仿真",     en:"Soft Robotic Esophagus · In Vitro Swallowing"}, note:{zh:"奥克兰大学 · 院长嘉许名单",en:"University of Auckland · Dean's List"} },
-  { category:"已毕业", name:"Bangxiang Chen",  year:{zh:"2021届",en:"Class of 2021"}, photo:"photos/BangxiangChen.jpg", interests:{zh:"多功能咀嚼机器人 · 食品质构分析",   en:"Versatile Chewing Robot · Food Texture Analysis"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
+  { category:"已毕业", name:{zh:"陈邦祥", en:"Bangxiang Chen"},  year:{zh:"2021届",en:"Class of 2021"}, photo:"photos/BangxiangChen.jpg", interests:{zh:"多功能咀嚼机器人 · 食品质构分析",   en:"Versatile Chewing Robot · Food Texture Analysis"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
   { category:"已毕业", name:"D. Bhattacharya", year:{zh:"2020届",en:"Class of 2020"}, interests:{zh:"软体食道机器人 · 支架测试与吞咽",   en:"Soft Robotic Esophagus · Stent Testing & Swallowing"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
   { category:"已毕业", name:"A.B. Hashem",     year:{zh:"2020届",en:"Class of 2020"}, interests:{zh:"仿生软体胃机器人 · 波纹管驱动",     en:"Bio-inspired Soft Stomach Robot · Bellows-driven"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
   { category:"已毕业", name:"D. Yu",           year:{zh:"2019届",en:"Class of 2019"}, interests:{zh:"气动软体机器人 · 胃蠕动模拟",       en:"Pneumatic Soft Robot · Gastric Motility"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
@@ -425,17 +414,20 @@ function render(animate){
   CATEGORIES.forEach((cat,gi)=>{
     const list = groups[cat.zh];
     if(!list || !list.length) return;
+    const reals = list.filter(m=>!m.placeholder);
     const id = "group-"+gi;
     navHTML += `<a href="#${id}">${esc(t(cat))}</a>`;
-    const cards = list.map(m=>cardEl(m,idx++,rc,si)).join("");
+    const inner = reals.length
+      ? `<div class="grid">${reals.map(m=>cardEl(m,idx++,rc,si)).join("")}</div>`
+      : `<p class="empty-note${rc}"${si(idx++)}>${esc(t(UI.none))}</p>`;
     bodyHTML += `
     <section id="${id}">
       <div class="section-head${rc}"${si(idx)}>
         <h2>${esc(t(cat))}</h2>
-        <span class="count">${list.length}</span>
+        ${reals.length?`<span class="count">${reals.length}</span>`:""}
         <span class="rule"></span>
       </div>
-      <div class="grid">${cards}</div>
+      ${inner}
     </section>`;
   });
   document.getElementById("nav-links").innerHTML = navHTML;
