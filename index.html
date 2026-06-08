@@ -51,12 +51,13 @@
     -webkit-backdrop-filter:blur(10px);
     border-bottom:1px solid var(--line);
   }
-  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px;gap:1.5rem;}
-  .nav-brand{font-family:var(--serif);font-weight:600;font-size:1.1rem;letter-spacing:.01em;white-space:nowrap;}
-  .nav-links{display:flex;gap:1.4rem;overflow-x:auto;}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px;gap:1.2rem;}
+  .nav-brand{font-family:var(--serif);font-weight:600;font-size:1.05rem;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .nav-right{display:flex;align-items:center;gap:1.1rem;min-width:0;}
+  .nav-links{display:flex;gap:1.3rem;overflow-x:auto;}
   .nav-links a{
     color:var(--ink-soft);text-decoration:none;font-size:.82rem;
-    letter-spacing:.06em;white-space:nowrap;position:relative;padding-bottom:2px;
+    letter-spacing:.04em;white-space:nowrap;position:relative;padding-bottom:2px;
     transition:color .2s;
   }
   .nav-links a::after{
@@ -65,6 +66,15 @@
   }
   .nav-links a:hover{color:var(--accent);}
   .nav-links a:hover::after{width:100%;}
+  .lang-toggle{
+    font-family:var(--sans);font-size:.8rem;letter-spacing:.04em;
+    color:var(--accent);background:var(--accent-soft);
+    border:1px solid color-mix(in srgb,var(--accent) 28%, transparent);
+    padding:.32rem .8rem;border-radius:999px;cursor:pointer;white-space:nowrap;
+    transition:background .2s,color .2s,transform .15s;
+  }
+  .lang-toggle:hover{background:var(--accent);color:#fff;}
+  .lang-toggle:active{transform:scale(.96);}
 
   /* ---- 头部 Hero ---- */
   .hero{padding:clamp(3rem,8vw,6rem) 0 clamp(2rem,5vw,3.5rem);}
@@ -74,14 +84,14 @@
   }
   .hero h1{
     font-family:var(--serif);font-weight:600;line-height:1.08;
-    font-size:clamp(2.4rem,6vw,4.4rem);letter-spacing:-.01em;
+    font-size:clamp(2.2rem,5.5vw,4rem);letter-spacing:-.01em;
   }
   .hero .name-en{
     font-family:var(--serif);font-style:italic;font-weight:400;
-    color:var(--ink-faint);font-size:clamp(1.1rem,2.4vw,1.5rem);margin-top:.5rem;
+    color:var(--ink-faint);font-size:clamp(1.05rem,2.4vw,1.45rem);margin-top:.5rem;
   }
   .hero .intro{
-    margin-top:1.6rem;max-width:60ch;color:var(--ink-soft);
+    margin-top:1.6rem;max-width:64ch;color:var(--ink-soft);
     font-size:1.05rem;font-weight:300;
   }
   .hero .meta{
@@ -155,7 +165,10 @@
 <header class="site-header">
   <div class="wrap nav-inner">
     <div class="nav-brand" id="nav-brand"></div>
-    <nav class="nav-links" id="nav-links"></nav>
+    <div class="nav-right">
+      <nav class="nav-links" id="nav-links"></nav>
+      <button class="lang-toggle" id="lang-toggle" type="button"></button>
+    </div>
   </div>
 </header>
 
@@ -170,113 +183,136 @@
 
 <script>
 /* =========================================================================
-   下面这一块是你唯一需要编辑的地方。更新成员信息只改这里即可。
+   只需编辑下面这一块。EDIT ONLY THIS BLOCK.
+   双语写法:字段可写成 "纯文本"(中英相同),或 {zh:"中文", en:"English"}。
+   邮箱、网址等不用翻译的,直接写纯文本即可。
    ========================================================================= */
 
-/* 课题组的基本信息 */
+/* 课题组基本信息 */
 const LAB_INFO = {
-  name:        "生物机电与软体机器人课题组",          // 课题组中文名(必填)
-  nameEn:      "Biomechatronics & Soft Robotics — Peter Xu Lab",  // 英文名(可选)
-  institution: "奥克兰大学 · 机械与机电工程系",  // 单位/学院(可选)
-  intro:       "面向医学、食品与药物的先进机电与机器人研究,涵盖软体机器人、消化机器人(咀嚼 / 吞咽 / 食道 / 胃)、软组织操控,以及数据驱动的建模与控制。",  // 一句话简介(可选)
-  email:       "",            // 联系邮箱(可选)
-  address:     "",   // 地址(可选)
+  name:        {zh:"生物机电与软体机器人课题组", en:"Biomechatronics & Soft Robotics Lab"},
+  institution: {zh:"奥克兰大学 · 机械与机电工程系", en:"University of Auckland · Mechanical & Mechatronics Engineering"},
+  intro:       {zh:"面向医学、食品与药物的先进机电与机器人研究,涵盖软体机器人、消化机器人(咀嚼 / 吞咽 / 食道 / 胃)、软组织操控,以及数据驱动的建模与控制。",
+                en:"Advanced mechatronics and robotics for medicine, food and pharmaceuticals — spanning soft robotics, digestion robotics (chewing, swallowing, esophagus and stomach), soft-tissue manipulation, and data-driven modelling and control."},
+  email:       "p.xu@auckland.ac.nz",
+  address:     {zh:"", en:""},
 };
 
-/* 分组的显示顺序。没有成员的分组会自动隐藏;可自由增删、改名 */
-const CATEGORY_ORDER = ["导师", "博士后", "博士研究生", "硕士研究生", "本科生", "已毕业"];
+/* 界面文字(可按需微调) */
+const UI = {
+  toggle:     {zh:"EN", en:"中文"},        // 切换按钮上显示的文字(即将切到的语言)
+  emailLabel: {zh:"联系邮箱", en:"Email"},
+};
 
-/* 成员列表。每个成员是一个 { } 对象,字段说明:
-     category : 所属分组,必须和上面 CATEGORY_ORDER 里的名字一致(必填)
-     name     : 中文姓名(必填)
-     nameEn   : 英文名 / 拼音(可选)
-     title    : 职称或角色,如 "教授 · 博士生导师"(可选)
-     year     : 年级/届别,如 "2022级"、"2024届"(可选,会显示成小标签)
-     interests: 研究方向(可选)
-     email    : 邮箱(可选)
-     homepage : 个人主页网址(可选)
-     scholar  : Google Scholar 网址(可选)
-     github   : GitHub 网址(可选)
-     orcid    : ORCID 网址(可选)
-     photo    : 照片。把照片放进网站目录下的 photos/ 文件夹,这里写 "photos/文件名.jpg";
-                也可以填完整网址;留空则自动显示姓氏首字的头像(可选)
-     note     : 备注(可选),常用于已毕业成员写去向,如 "现就职于某某公司"
-   复制其中一行,改成员信息,即可新增一位成员。逗号、引号不要漏。 */
+/* 分组顺序与中英文名称。没有成员的分组会自动隐藏。 */
+const CATEGORIES = [
+  {zh:"导师",        en:"Principal Investigator"},
+  {zh:"博士后",      en:"Postdoctoral Fellows"},
+  {zh:"博士研究生",  en:"PhD Students"},
+  {zh:"硕士研究生",  en:"Master's Students"},
+  {zh:"本科生",      en:"Undergraduate Students"},
+  {zh:"已毕业",      en:"Alumni"},
+];
+
+/* 成员列表。category 用上面分组的中文名;其余字段可纯文本或 {zh, en}。
+   可用字段:category, name, nameEn, title, year, interests,
+            email, homepage, scholar, github, orcid, photo, note
+   照片:放进同目录 photos/ 文件夹,photo 写 "photos/文件名.jpg";留空显示首字头像。 */
 const MEMBERS = [
   {
     category:"导师", name:"Peter Xu", nameEn:"Weiliang Xu",
-    title:"机电工程讲席教授 · 博士生导师",
-    interests:"软体机器人 · 消化机器人(咀嚼 / 吞咽 / 食道 / 胃) · 软组织操控 · 医疗与食品机电系统",
+    title:{zh:"机电工程讲席教授 · 博士生导师", en:"Chair Professor in Mechatronics · PhD Supervisor"},
+    interests:{zh:"软体机器人 · 消化机器人(咀嚼 / 吞咽 / 食道 / 胃) · 软组织操控 · 医疗与食品机电系统",
+               en:"Soft Robotics · Digestion Robotics (chewing / swallowing / esophagus / stomach) · Soft-tissue Manipulation · Mechatronics for Medicine & Food"},
     email:"p.xu@auckland.ac.nz",
     homepage:"https://profiles.auckland.ac.nz/p-xu",
     scholar:"https://scholar.google.com/citations?user=DlX_-qYAAAAJ",
     photo:"",
   },
+
+  // —— 博士后(示例,请替换为真人或删除整段) ——
   {
-    category:"博士研究生", name:"S. Duanmu", nameEn:"",
-    title:"博士研究生", year:"2021级",
-    interests:"软体机器人 · 药物体外吞咽仿真",
-    email:"", photo:"",
-  },
-  {
-    category:"博士研究生", name:"X.D. Wang", nameEn:"",
-    title:"博士研究生", year:"2021级",
-    interests:"新一代咀嚼机器人",
-    email:"", photo:"",
-  },
-  {
-    category:"博士研究生", name:"S. Y. Ren", nameEn:"",
-    title:"博士研究生", year:"2022级",
-    interests:"仿生口腔 · 体外机器人咀嚼仿真",
-    email:"", photo:"",
-  },
-  {
-    category:"博士研究生", name:"I. Akarawita", nameEn:"",
-    title:"博士研究生", year:"2023级",
-    interests:"机器视觉与深度学习 · 体外咀嚼过程在线评估",
+    category:"博士后", name:{zh:"示例博士后 · 请替换", en:"Example Postdoc · replace me"},
+    title:{zh:"博士后研究员", en:"Postdoctoral Researcher"}, year:{zh:"2024 入站", en:"Joined 2024"},
+    interests:{zh:"研究方向", en:"Research interests"},
     email:"", photo:"",
   },
 
-  // 已毕业校友(按毕业年份从新到旧)
-  { category:"已毕业", name:"Q. Zhang",        title:"博士", year:"2023届", interests:"软体物体变形建模 · 机器人器官操控",   note:"奥克兰大学" },
-  { category:"已毕业", name:"S. Kazemi",       title:"博士", year:"2023届", interests:"软体胃模拟器 · 仿生闭环控制",       note:"奥克兰大学" },
-  { category:"已毕业", name:"M. Kazemzadeh",   title:"博士", year:"2023届", interests:"深度学习 · 纳米等离子体生物传感",    note:"奥克兰大学" },
-  { category:"已毕业", name:"Z.X. Chen",       title:"博士", year:"2023届", interests:"软体桌面物体操控 · 建模与控制",     note:"奥克兰大学" },
-  { category:"已毕业", name:"S. Jesna",        title:"博士", year:"2022届", interests:"软体食道机器人 · 吞咽体外仿真",     note:"奥克兰大学 · 院长嘉许名单" },
-  { category:"已毕业", name:"B.X. Chen",       title:"博士", year:"2021届", interests:"多功能咀嚼机器人 · 食品质构分析",   note:"奥克兰大学" },
-  { category:"已毕业", name:"D. Bhattacharya", title:"博士", year:"2020届", interests:"软体食道机器人 · 支架测试与吞咽",   note:"奥克兰大学" },
-  { category:"已毕业", name:"A.B. Hashem",     title:"博士", year:"2020届", interests:"仿生软体胃机器人 · 波纹管驱动",     note:"奥克兰大学" },
-  { category:"已毕业", name:"D. Yu",           title:"博士", year:"2019届", interests:"气动软体机器人 · 胃蠕动模拟",       note:"奥克兰大学" },
-  { category:"已毕业", name:"S. Mostashiri",   title:"博士", year:"2019届", interests:"冗余驱动并联机器人 · 动力学与控制", note:"奥克兰大学" },
-  { category:"已毕业", name:"A.B. Din",        title:"博士", year:"2018届", interests:"可拉伸传感 · 软体机器人",           note:"奥克兰大学" },
-  { category:"已毕业", name:"J. Kutia",        title:"博士", year:"2018届", interests:"空中操控 · 树冠采样",               note:"奥克兰大学" },
-  { category:"已毕业", name:"H. Chen",         title:"博士", year:"2018届", interests:"光纤拉曼传感 · 在体神经检测",       note:"奥克兰大学" },
-  { category:"已毕业", name:"Z.C. Deng",       title:"博士", year:"2018届", interests:"XY 软体机器台 · 多物体操控",        note:"奥克兰大学" },
-  { category:"已毕业", name:"Z.L. Mo",         title:"博士", year:"2017届", interests:"光纤力传感 · 微创手术",             note:"奥克兰大学" },
-  { category:"已毕业", name:"L. Xie",          title:"博士", year:"2017届", interests:"全向移动机器人 · 能耗最优导航",     note:"奥克兰大学" },
-  { category:"已毕业", name:"B.Y. Huo",        title:"博士", year:"2016届", interests:"柔性针机器人 · 辅助转向",           note:"中科院沈阳自动化研究所" },
-  { category:"已毕业", name:"H.Y. Wen",        title:"博士", year:"2016届", interests:"仿生咀嚼机器人 · 冗余驱动",         note:"大连理工大学" },
-  { category:"已毕业", name:"C.V. Pham",       title:"博士", year:"2016届", interests:"交通信号控制 · 自适应集成",         note:"梅西大学" },
-  { category:"已毕业", name:"M.Z. Zhu",        title:"博士", year:"2016届", interests:"软体吞咽机器人 · 蠕动控制与传感",   note:"奥克兰大学" },
-  { category:"已毕业", name:"C. Cheng",        title:"博士", year:"2015届", interests:"并联咀嚼机器人 · 运动学与控制",     note:"奥克兰大学" },
-  { category:"已毕业", name:"F.J. Chen",       title:"博士", year:"2015届", interests:"仿生食道机器人",                   note:"南京理工大学" },
-  { category:"已毕业", name:"S. Dirven",       title:"博士", year:"2014届", interests:"仿生软体蠕动食道驱动器",           note:"奥克兰大学" },
-  { category:"已毕业", name:"X.Y. Wang",       title:"博士", year:"2014届", interests:"可穿戴康复 · 颌运动障碍",           note:"梅西大学" },
-  { category:"已毕业", name:"I. Emerson",      title:"博士", year:"2014届", interests:"中风康复 · 镜像疗法机器人",         note:"梅西大学" },
-  { category:"已毕业", name:"X.F. Yu",         title:"博士", year:"2014届", interests:"匝道控制 · 动态规划算法",           note:"梅西大学" },
-  { category:"已毕业", name:"C. Sun",          title:"博士", year:"2012届", interests:"连杆咀嚼机器人 · 柔顺控制",         note:"梅西大学" },
-  { category:"已毕业", name:"J. Torrance",     title:"博士", year:"2011届", interests:"6RSS 并联咀嚼机器人 · 运动控制",    note:"梅西大学" },
-  { category:"已毕业", name:"E. Hirst",        title:"博士", year:"2009届", interests:"声波生物传感器 · 键断裂检测",       note:"梅西大学" },
-  { category:"已毕业", name:"M. van der Werff",title:"博士", year:"2008届", interests:"键断裂检测 · 数字仪器",             note:"梅西大学" },
-  { category:"已毕业", name:"L. Han",          title:"博士", year:"2002届", interests:"柔性振动送料 · 敏捷制造",           note:"香港城市大学" },
-  { category:"已毕业", name:"Z.H. Wang",       title:"博士", year:"2002届", interests:"高精度鲁棒运动控制",               note:"东南大学" },
-  { category:"已毕业", name:"T.W. Yang",       title:"博士", year:"2001届", interests:"微-宏柔性机械臂 · 传感与控制",      note:"东南大学" },
-  { category:"已毕业", name:"X.S. Wang",       title:"博士", year:"2000届", interests:"柔性机械臂 · 传感动力学控制",       note:"东南大学" },
+  // —— 博士研究生 ——
+  { category:"博士研究生", name:"S. Duanmu", year:{zh:"2021级",en:"2021 cohort"},
+    title:{zh:"博士研究生",en:"PhD Student"},
+    interests:{zh:"软体机器人 · 药物体外吞咽仿真",en:"Soft Robotics · In Vitro Drug Swallowing"} },
+  { category:"博士研究生", name:"X.D. Wang", year:{zh:"2021级",en:"2021 cohort"},
+    title:{zh:"博士研究生",en:"PhD Student"},
+    interests:{zh:"新一代咀嚼机器人",en:"Next-generation Mastication Robot"} },
+  { category:"博士研究生", name:"S. Y. Ren", year:{zh:"2022级",en:"2022 cohort"},
+    title:{zh:"博士研究生",en:"PhD Student"},
+    interests:{zh:"仿生口腔 · 体外机器人咀嚼仿真",en:"Biomimetic Oral Cavity · In Vitro Robotic Chewing"} },
+  { category:"博士研究生", name:"I. Akarawita", year:{zh:"2023级",en:"2023 cohort"},
+    title:{zh:"博士研究生",en:"PhD Student"},
+    interests:{zh:"机器视觉与深度学习 · 体外咀嚼过程评估",en:"Machine Vision & Deep Learning · In Vitro Chewing Assessment"} },
+
+  // —— 硕士研究生(示例,请替换为真人或删除整段) ——
+  {
+    category:"硕士研究生", name:{zh:"示例硕士生 · 请替换", en:"Example Master's · replace me"},
+    title:{zh:"硕士研究生", en:"Master's Student"}, year:{zh:"2024级", en:"2024 cohort"},
+    interests:{zh:"研究方向", en:"Research interests"},
+    email:"", photo:"",
+  },
+
+  // —— 本科生(示例,请替换为真人或删除整段) ——
+  {
+    category:"本科生", name:{zh:"示例本科生 · 请替换", en:"Example Undergraduate · replace me"},
+    title:{zh:"本科生 · 科研助理", en:"Undergraduate · Research Assistant"},
+    interests:{zh:"研究方向", en:"Research interests"},
+    email:"", photo:"",
+  },
+
+  // —— 已毕业校友(按毕业年份从新到旧) ——
+  { category:"已毕业", name:"Q. Zhang",        year:{zh:"2023届",en:"Class of 2023"}, interests:{zh:"软体物体变形建模 · 机器人器官操控",   en:"Soft-object Deformation Modelling · Robotic Organ Manipulation"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
+  { category:"已毕业", name:"S. Kazemi",       year:{zh:"2023届",en:"Class of 2023"}, interests:{zh:"软体胃模拟器 · 仿生闭环控制",       en:"Soft Gastric Simulator · Biomimetic Closed-loop Control"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
+  { category:"已毕业", name:"M. Kazemzadeh",   year:{zh:"2023届",en:"Class of 2023"}, interests:{zh:"深度学习 · 纳米等离子体生物传感",    en:"Deep Learning · Nanoplasmonic Biosensing"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
+  { category:"已毕业", name:"Z.X. Chen",       year:{zh:"2023届",en:"Class of 2023"}, interests:{zh:"软体桌面物体操控 · 建模与控制",     en:"Soft Robotic Table · Manipulation, Modelling & Control"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
+  { category:"已毕业", name:"S. Jesna",        year:{zh:"2022届",en:"Class of 2022"}, interests:{zh:"软体食道机器人 · 吞咽体外仿真",     en:"Soft Robotic Esophagus · In Vitro Swallowing"}, note:{zh:"奥克兰大学 · 院长嘉许名单",en:"University of Auckland · Dean's List"} },
+  { category:"已毕业", name:"B.X. Chen",       year:{zh:"2021届",en:"Class of 2021"}, interests:{zh:"多功能咀嚼机器人 · 食品质构分析",   en:"Versatile Chewing Robot · Food Texture Analysis"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
+  { category:"已毕业", name:"D. Bhattacharya", year:{zh:"2020届",en:"Class of 2020"}, interests:{zh:"软体食道机器人 · 支架测试与吞咽",   en:"Soft Robotic Esophagus · Stent Testing & Swallowing"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
+  { category:"已毕业", name:"A.B. Hashem",     year:{zh:"2020届",en:"Class of 2020"}, interests:{zh:"仿生软体胃机器人 · 波纹管驱动",     en:"Bio-inspired Soft Stomach Robot · Bellows-driven"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
+  { category:"已毕业", name:"D. Yu",           year:{zh:"2019届",en:"Class of 2019"}, interests:{zh:"气动软体机器人 · 胃蠕动模拟",       en:"Pneumatic Soft Robot · Gastric Motility"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
+  { category:"已毕业", name:"S. Mostashiri",   year:{zh:"2019届",en:"Class of 2019"}, interests:{zh:"冗余驱动并联机器人 · 动力学与控制", en:"Actuation-redundant Parallel Robots · Dynamics & Control"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
+  { category:"已毕业", name:"A.B. Din",        year:{zh:"2018届",en:"Class of 2018"}, interests:{zh:"可拉伸传感 · 软体机器人",           en:"Stretchable Sensing · Soft Robotics"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
+  { category:"已毕业", name:"J. Kutia",        year:{zh:"2018届",en:"Class of 2018"}, interests:{zh:"空中操控 · 树冠采样",               en:"Aerial Manipulation · Canopy Sampling"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
+  { category:"已毕业", name:"H. Chen",         year:{zh:"2018届",en:"Class of 2018"}, interests:{zh:"光纤拉曼传感 · 在体神经检测",       en:"Fiber-optic Raman Sensing · In Vivo Nerve Detection"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
+  { category:"已毕业", name:"Z.C. Deng",       year:{zh:"2018届",en:"Class of 2018"}, interests:{zh:"XY 软体机器台 · 多物体操控",        en:"XY Soft Machine Table · Multi-object Manipulation"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
+  { category:"已毕业", name:"Z.L. Mo",         year:{zh:"2017届",en:"Class of 2017"}, interests:{zh:"光纤力传感 · 微创手术",             en:"Fiber-optic Force Sensing · Minimally Invasive Surgery"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
+  { category:"已毕业", name:"L. Xie",          year:{zh:"2017届",en:"Class of 2017"}, interests:{zh:"全向移动机器人 · 能耗最优导航",     en:"Omnidirectional Mobile Robot · Energy-optimal Navigation"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
+  { category:"已毕业", name:"B.Y. Huo",        year:{zh:"2016届",en:"Class of 2016"}, interests:{zh:"柔性针机器人 · 辅助转向",           en:"Flexible Needle Robot · Steering Assistance"}, note:{zh:"中科院沈阳自动化研究所",en:"Shenyang Institute of Automation, CAS"} },
+  { category:"已毕业", name:"H.Y. Wen",        year:{zh:"2016届",en:"Class of 2016"}, interests:{zh:"仿生咀嚼机器人 · 冗余驱动",         en:"Biomimetic Mastication Robot · Redundant Actuation"}, note:{zh:"大连理工大学",en:"Dalian University of Technology"} },
+  { category:"已毕业", name:"C.V. Pham",       year:{zh:"2016届",en:"Class of 2016"}, interests:{zh:"交通信号控制 · 自适应集成",         en:"Adaptive Integrated Traffic Signal Control"}, note:{zh:"梅西大学",en:"Massey University"} },
+  { category:"已毕业", name:"M.Z. Zhu",        year:{zh:"2016届",en:"Class of 2016"}, interests:{zh:"软体吞咽机器人 · 蠕动控制与传感",   en:"Soft Swallowing Robot · Peristalsis Control & Sensing"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
+  { category:"已毕业", name:"C. Cheng",        year:{zh:"2015届",en:"Class of 2015"}, interests:{zh:"并联咀嚼机器人 · 运动学与控制",     en:"Parallel Masticatory Robot · Kinematics & Control"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
+  { category:"已毕业", name:"F.J. Chen",       year:{zh:"2015届",en:"Class of 2015"}, interests:{zh:"仿生食道机器人",                   en:"Biomimetic Esophageal Robot"}, note:{zh:"南京理工大学",en:"Nanjing University of Science and Technology"} },
+  { category:"已毕业", name:"S. Dirven",       year:{zh:"2014届",en:"Class of 2014"}, interests:{zh:"仿生软体蠕动食道驱动器",           en:"Bio-inspired Soft Peristaltic Esophageal Actuator"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
+  { category:"已毕业", name:"X.Y. Wang",       year:{zh:"2014届",en:"Class of 2014"}, interests:{zh:"可穿戴康复 · 颌运动障碍",           en:"Wearable Rehabilitation · Jaw Motion Disability"}, note:{zh:"梅西大学",en:"Massey University"} },
+  { category:"已毕业", name:"I. Emerson",      year:{zh:"2014届",en:"Class of 2014"}, interests:{zh:"中风康复 · 镜像疗法机器人",         en:"Stroke Rehabilitation · Mirror Therapy Robotics"}, note:{zh:"梅西大学",en:"Massey University"} },
+  { category:"已毕业", name:"X.F. Yu",         year:{zh:"2014届",en:"Class of 2014"}, interests:{zh:"匝道控制 · 动态规划算法",           en:"Ramp Metering · Dynamic Programming"}, note:{zh:"梅西大学",en:"Massey University"} },
+  { category:"已毕业", name:"C. Sun",          year:{zh:"2012届",en:"Class of 2012"}, interests:{zh:"连杆咀嚼机器人 · 柔顺控制",         en:"Linkage Chewing Robot · Compliance Control"}, note:{zh:"梅西大学",en:"Massey University"} },
+  { category:"已毕业", name:"J. Torrance",     year:{zh:"2011届",en:"Class of 2011"}, interests:{zh:"6RSS 并联咀嚼机器人 · 运动控制",    en:"6RSS Parallel Chewing Robot · Motion Control"}, note:{zh:"梅西大学",en:"Massey University"} },
+  { category:"已毕业", name:"E. Hirst",        year:{zh:"2009届",en:"Class of 2009"}, interests:{zh:"声波生物传感器 · 键断裂检测",       en:"Acoustic-wave Biosensor · Bond Rupture"}, note:{zh:"梅西大学",en:"Massey University"} },
+  { category:"已毕业", name:"M. van der Werff",year:{zh:"2008届",en:"Class of 2008"}, interests:{zh:"键断裂检测 · 数字仪器",             en:"Bond Rupture Detection · Digital Instrumentation"}, note:{zh:"梅西大学",en:"Massey University"} },
+  { category:"已毕业", name:"L. Han",          year:{zh:"2002届",en:"Class of 2002"}, interests:{zh:"柔性振动送料 · 敏捷制造",           en:"Flexible Vibratory Feeding · Agile Manufacturing"}, note:{zh:"香港城市大学",en:"City University of Hong Kong"} },
+  { category:"已毕业", name:"Z.H. Wang",       year:{zh:"2002届",en:"Class of 2002"}, interests:{zh:"高精度鲁棒运动控制",               en:"High-precision Robust Motion Control"}, note:{zh:"东南大学",en:"Southeast University"} },
+  { category:"已毕业", name:"T.W. Yang",       year:{zh:"2001届",en:"Class of 2001"}, interests:{zh:"微-宏柔性机械臂 · 传感与控制",      en:"Micro-macro Flexible Manipulator · Sensing & Control"}, note:{zh:"东南大学",en:"Southeast University"} },
+  { category:"已毕业", name:"X.S. Wang",       year:{zh:"2000届",en:"Class of 2000"}, interests:{zh:"柔性机械臂 · 传感动力学控制",       en:"Flexible Manipulator · Sensor-based Dynamics Control"}, note:{zh:"东南大学",en:"Southeast University"} },
 ];
 
 /* =========================================================================
-   下面是渲染逻辑,一般不需要改动。
+   以下为渲染逻辑,一般无需改动。Rendering logic below.
    ========================================================================= */
+
+let lang = (navigator.language||"").toLowerCase().startsWith("zh") ? "zh" : "en";
+
+function t(v){ if(v==null) return ""; if(typeof v==="object") return v[lang] ?? v.zh ?? v.en ?? ""; return v; }
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
 const ICONS = {
   email:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
@@ -286,98 +322,105 @@ const ICONS = {
   orcid:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><line x1="9" y1="8.5" x2="9" y2="16.5"/><circle cx="9" cy="6.4" r=".9" fill="currentColor" stroke="none"/><path d="M12.5 8.5h2.2a4 4 0 0 1 0 8h-2.2z"/></svg>',
 };
 
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-
 function linkEl(url,type,label){
   if(!url) return "";
-  return `<a href="${esc(url)}" target="_blank" rel="noopener" aria-label="${label}" title="${label}">${ICONS[type]}</a>`;
+  const l = esc(t(label));
+  return `<a href="${esc(url)}" target="_blank" rel="noopener" aria-label="${l}" title="${l}">${ICONS[type]}</a>`;
 }
 
 function avatarEl(m){
-  if(m.photo){
-    return `<img class="avatar" src="${esc(m.photo)}" alt="${esc(m.name)}" loading="lazy">`;
-  }
-  const initial = (m.name||"").trim().charAt(0) || "·";
+  const photo = t(m.photo);
+  if(photo){ return `<img class="avatar" src="${esc(photo)}" alt="${esc(t(m.name))}" loading="lazy">`; }
+  const initial = (t(m.name)||"").trim().charAt(0) || "·";
   return `<div class="avatar" aria-hidden="true">${esc(initial)}</div>`;
 }
 
-function cardEl(m,i){
+function cardEl(m,i,rc,si){
   const links = [
-    linkEl(m.email?("mailto:"+m.email):"","email","邮箱"),
-    linkEl(m.homepage,"homepage","个人主页"),
-    linkEl(m.scholar,"scholar","Google Scholar"),
-    linkEl(m.github,"github","GitHub"),
-    linkEl(m.orcid,"orcid","ORCID"),
+    linkEl(m.email?("mailto:"+t(m.email)):"","email",{zh:"邮箱",en:"Email"}),
+    linkEl(t(m.homepage),"homepage",{zh:"个人主页",en:"Homepage"}),
+    linkEl(t(m.scholar),"scholar","Google Scholar"),
+    linkEl(t(m.github),"github","GitHub"),
+    linkEl(t(m.orcid),"orcid","ORCID"),
   ].join("");
+  const nameEn=t(m.nameEn), title=t(m.title), year=t(m.year), interests=t(m.interests), note=t(m.note);
   return `
-  <article class="card reveal" style="--i:${i}">
+  <article class="card${rc}"${si(i)}>
     <div class="card-top">
       ${avatarEl(m)}
       <div>
-        <div class="card-name">${esc(m.name)}${m.nameEn?` <span class="card-name-en">${esc(m.nameEn)}</span>`:""}</div>
-        ${m.title?`<div class="card-title">${esc(m.title)}</div>`:""}
+        <div class="card-name">${esc(t(m.name))}${nameEn?` <span class="card-name-en">${esc(nameEn)}</span>`:""}</div>
+        ${title?`<div class="card-title">${esc(title)}</div>`:""}
       </div>
     </div>
-    ${m.year?`<span class="tag">${esc(m.year)}</span>`:""}
-    ${m.interests?`<p class="card-interests">${esc(m.interests)}</p>`:""}
-    ${m.note?`<p class="card-note">${esc(m.note)}</p>`:""}
+    ${year?`<span class="tag">${esc(year)}</span>`:""}
+    ${interests?`<p class="card-interests">${esc(interests)}</p>`:""}
+    ${note?`<p class="card-note">${esc(note)}</p>`:""}
     ${links.trim()?`<div class="card-links">${links}</div>`:""}
   </article>`;
 }
 
-function render(){
-  document.title = LAB_INFO.name || "课题组主页";
-  document.getElementById("nav-brand").textContent = LAB_INFO.name || "";
+function render(animate){
+  const rc = animate ? " reveal" : "";
+  const si = (i)=> animate ? ` style="--i:${i}"` : "";
+  const other = lang==="zh" ? "en" : "zh";
+
+  document.documentElement.lang = lang==="zh" ? "zh-CN" : "en";
+  document.title = t(LAB_INFO.name);
+  document.getElementById("nav-brand").textContent = t(LAB_INFO.name);
+  document.getElementById("lang-toggle").textContent = UI.toggle[lang];
 
   // Hero
-  const hero = document.getElementById("hero");
   let heroHTML = "";
-  if(LAB_INFO.institution) heroHTML += `<div class="kicker reveal" style="--i:0">${esc(LAB_INFO.institution)}</div>`;
-  heroHTML += `<h1 class="reveal" style="--i:1">${esc(LAB_INFO.name||"")}</h1>`;
-  if(LAB_INFO.nameEn) heroHTML += `<div class="name-en reveal" style="--i:2">${esc(LAB_INFO.nameEn)}</div>`;
-  if(LAB_INFO.intro) heroHTML += `<p class="intro reveal" style="--i:3">${esc(LAB_INFO.intro)}</p>`;
+  if(t(LAB_INFO.institution)) heroHTML += `<div class="kicker${rc}"${si(0)}>${esc(t(LAB_INFO.institution))}</div>`;
+  heroHTML += `<h1 class="${rc.trim()}"${si(1)}>${esc(t(LAB_INFO.name))}</h1>`;
+  if(LAB_INFO.name[other]) heroHTML += `<div class="name-en${rc}"${si(2)}>${esc(LAB_INFO.name[other])}</div>`;
+  if(t(LAB_INFO.intro)) heroHTML += `<p class="intro${rc}"${si(3)}>${esc(t(LAB_INFO.intro))}</p>`;
   const metaBits = [];
-  if(LAB_INFO.email) metaBits.push(`联系邮箱 <a href="mailto:${esc(LAB_INFO.email)}">${esc(LAB_INFO.email)}</a>`);
-  if(LAB_INFO.address) metaBits.push(esc(LAB_INFO.address));
-  if(metaBits.length) heroHTML += `<div class="meta reveal" style="--i:4">${metaBits.map(b=>`<span>${b}</span>`).join("")}</div>`;
-  hero.innerHTML = heroHTML;
+  if(LAB_INFO.email) metaBits.push(`${esc(t(UI.emailLabel))} <a href="mailto:${esc(t(LAB_INFO.email))}">${esc(t(LAB_INFO.email))}</a>`);
+  const addr = t(LAB_INFO.address); if(addr) metaBits.push(esc(addr));
+  if(metaBits.length) heroHTML += `<div class="meta${rc}"${si(4)}>${metaBits.map(b=>`<span>${b}</span>`).join("")}</div>`;
+  document.getElementById("hero").innerHTML = heroHTML;
 
   // 按分组归类
   const groups = {};
   MEMBERS.forEach(m=>{(groups[m.category]=groups[m.category]||[]).push(m);});
-  const cats = [...CATEGORY_ORDER.filter(c=>groups[c]), ...Object.keys(groups).filter(c=>!CATEGORY_ORDER.includes(c))];
 
-  // 渲染分组与导航
-  const nav = document.getElementById("nav-links");
-  const container = document.getElementById("members");
   let navHTML = "", bodyHTML = "", idx = 5;
-  cats.forEach((cat,gi)=>{
+  CATEGORIES.forEach((cat,gi)=>{
+    const list = groups[cat.zh];
+    if(!list || !list.length) return;
     const id = "group-"+gi;
-    navHTML += `<a href="#${id}">${esc(cat)}</a>`;
-    const cards = groups[cat].map(m=>cardEl(m,idx++)).join("");
+    navHTML += `<a href="#${id}">${esc(t(cat))}</a>`;
+    const cards = list.map(m=>cardEl(m,idx++,rc,si)).join("");
     bodyHTML += `
     <section id="${id}">
-      <div class="section-head reveal" style="--i:${idx}">
-        <h2>${esc(cat)}</h2>
-        <span class="count">${groups[cat].length}</span>
+      <div class="section-head${rc}"${si(idx)}>
+        <h2>${esc(t(cat))}</h2>
+        <span class="count">${list.length}</span>
         <span class="rule"></span>
       </div>
       <div class="grid">${cards}</div>
     </section>`;
   });
-  nav.innerHTML = navHTML;
-  container.innerHTML = bodyHTML;
+  document.getElementById("nav-links").innerHTML = navHTML;
+  document.getElementById("members").innerHTML = bodyHTML;
 
   // 页脚
   const foot = [];
-  foot.push(`<div class="foot-name">${esc(LAB_INFO.name||"")}</div>`);
-  if(LAB_INFO.address) foot.push(`<div>${esc(LAB_INFO.address)}</div>`);
-  if(LAB_INFO.email) foot.push(`<div>Email · <a href="mailto:${esc(LAB_INFO.email)}">${esc(LAB_INFO.email)}</a></div>`);
-  foot.push(`<div style="margin-top:1rem;">© ${new Date().getFullYear()} ${esc(LAB_INFO.name||"")}</div>`);
+  foot.push(`<div class="foot-name">${esc(t(LAB_INFO.name))}</div>`);
+  if(addr) foot.push(`<div>${esc(addr)}</div>`);
+  if(LAB_INFO.email) foot.push(`<div>Email · <a href="mailto:${esc(t(LAB_INFO.email))}">${esc(t(LAB_INFO.email))}</a></div>`);
+  foot.push(`<div style="margin-top:1rem;">© ${new Date().getFullYear()} ${esc(t(LAB_INFO.name))}</div>`);
   document.getElementById("footer").innerHTML = foot.join("");
 }
 
-render();
+document.getElementById("lang-toggle").addEventListener("click", ()=>{
+  lang = lang==="zh" ? "en" : "zh";
+  render(false);
+});
+
+render(true);
 </script>
 </body>
 </html>
