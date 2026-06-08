@@ -206,11 +206,12 @@ const UI = {
 
 /* 分组顺序与中英文名称。没有成员的分组会自动隐藏。 */
 const CATEGORIES = [
-  {zh:"导师",        en:"Principal Investigator"},
-  {zh:"博士后",      en:"Postdoctoral Fellows"},
-  {zh:"博士研究生",  en:"PhD Students"},
-  {zh:"硕士研究生",  en:"Master's Students"},
-  {zh:"本科生",      en:"Undergraduate Students"},
+  {zh:"导师",        en:"PI"},
+  {zh:"共同导师",    en:"Co-PI"},
+  {zh:"博士后",      en:"RF"},
+  {zh:"博士研究生",  en:"PhD"},
+  {zh:"硕士研究生",  en:"Master"},
+  {zh:"本科生",      en:"Undergraduate"},
   {zh:"已毕业",      en:"Alumni"},
 ];
 
@@ -227,7 +228,34 @@ const MEMBERS = [
     email:"p.xu@auckland.ac.nz",
     homepage:"https://profiles.auckland.ac.nz/p-xu",
     scholar:"https://scholar.google.com/citations?user=DlX_-qYAAAAJ",
-    photo:"",
+    photo:"photos/PeterXu.JPG",
+  },
+
+  // —— 共同导师 / Co-Supervisors ——
+  {
+    category:"共同导师", name:"Jaspreet Dhupia",
+    title:{zh:"奥克兰大学 · 高级讲师", en:"Senior Lecturer, University of Auckland"},
+    interests:{zh:"机电系统建模、监测与控制 · 系统辨识", en:"Modelling, Monitoring & Control of Mechatronic Systems · System Identification"},
+    email:"j.dhupia@auckland.ac.nz",
+    homepage:"https://profiles.auckland.ac.nz/j-dhupia",
+    scholar:"https://scholar.google.com/citations?user=jj2FX3EAAAAJ",
+    photo:"photos/JaspreetDhupia.jpg",
+  },
+  {
+    category:"共同导师", name:"Martin Stommel",
+    title:{zh:"AUT · 高级讲师", en:"Senior Lecturer, AUT"},
+    interests:{zh:"机器视觉 · 人工智能 · 软体机器人", en:"Machine Vision · Artificial Intelligence · Soft Robotics"},
+    email:"martin.stommel@aut.ac.nz",
+    homepage:"https://academics.aut.ac.nz/martin.stommel",
+    photo:"photos/MartinStommel.jpg",
+  },
+  {
+    category:"共同导师", name:"Bangxiang Chen",
+    title:{zh:"西交利物浦大学 · 助理教授", en:"Assistant Professor, XJTLU"},
+    interests:{zh:"咀嚼机器人 · 食品质构分析", en:"Chewing Robotics · Food Texture Analysis"},
+    email:"Bangxiang.Chen@xjtlu.edu.cn",
+    homepage:"https://scholar.xjtlu.edu.cn/en/persons/BangxiangChen",
+    photo:"photos/BangxiangChen.jpg",
   },
 
   // —— 博士后(示例,请替换为真人或删除整段) ——
@@ -239,17 +267,17 @@ const MEMBERS = [
   },
 
   // —— 博士研究生 ——
-  { category:"博士研究生", name:"S. Duanmu", year:{zh:"2021级",en:"2021 cohort"},
-    title:{zh:"博士研究生",en:"PhD Student"},
+  { category:"博士研究生", name:"Sam Duanmu", year:{zh:"2021级",en:"2021 cohort"},
+    title:{zh:"博士研究生",en:"PhD Student"}, photo:"photos/SamDuanmu.jpg",
     interests:{zh:"软体机器人 · 药物体外吞咽仿真",en:"Soft Robotics · In Vitro Drug Swallowing"} },
-  { category:"博士研究生", name:"X.D. Wang", year:{zh:"2021级",en:"2021 cohort"},
-    title:{zh:"博士研究生",en:"PhD Student"},
+  { category:"博士研究生", name:"Xudong Wang", year:{zh:"2021级",en:"2021 cohort"},
+    title:{zh:"博士研究生",en:"PhD Student"}, photo:"photos/XudongWang.jpg",
     interests:{zh:"新一代咀嚼机器人",en:"Next-generation Mastication Robot"} },
-  { category:"博士研究生", name:"S. Y. Ren", year:{zh:"2022级",en:"2022 cohort"},
-    title:{zh:"博士研究生",en:"PhD Student"},
+  { category:"博士研究生", name:"Shiyi Ren", year:{zh:"2022级",en:"2022 cohort"},
+    title:{zh:"博士研究生",en:"PhD Student"}, photo:"photos/ShiyiRen.jpg",
     interests:{zh:"仿生口腔 · 体外机器人咀嚼仿真",en:"Biomimetic Oral Cavity · In Vitro Robotic Chewing"} },
-  { category:"博士研究生", name:"I. Akarawita", year:{zh:"2023级",en:"2023 cohort"},
-    title:{zh:"博士研究生",en:"PhD Student"},
+  { category:"博士研究生", name:"Isurie Akarawita", year:{zh:"2023级",en:"2023 cohort"},
+    title:{zh:"博士研究生",en:"PhD Student"}, photo:"photos/IsurieAkarawita.jpg",
     interests:{zh:"机器视觉与深度学习 · 体外咀嚼过程评估",en:"Machine Vision & Deep Learning · In Vitro Chewing Assessment"} },
 
   // —— 硕士研究生(示例,请替换为真人或删除整段) ——
@@ -274,7 +302,7 @@ const MEMBERS = [
   { category:"已毕业", name:"M. Kazemzadeh",   year:{zh:"2023届",en:"Class of 2023"}, interests:{zh:"深度学习 · 纳米等离子体生物传感",    en:"Deep Learning · Nanoplasmonic Biosensing"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
   { category:"已毕业", name:"Z.X. Chen",       year:{zh:"2023届",en:"Class of 2023"}, interests:{zh:"软体桌面物体操控 · 建模与控制",     en:"Soft Robotic Table · Manipulation, Modelling & Control"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
   { category:"已毕业", name:"S. Jesna",        year:{zh:"2022届",en:"Class of 2022"}, interests:{zh:"软体食道机器人 · 吞咽体外仿真",     en:"Soft Robotic Esophagus · In Vitro Swallowing"}, note:{zh:"奥克兰大学 · 院长嘉许名单",en:"University of Auckland · Dean's List"} },
-  { category:"已毕业", name:"B.X. Chen",       year:{zh:"2021届",en:"Class of 2021"}, interests:{zh:"多功能咀嚼机器人 · 食品质构分析",   en:"Versatile Chewing Robot · Food Texture Analysis"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
+  { category:"已毕业", name:"Bangxiang Chen",  year:{zh:"2021届",en:"Class of 2021"}, photo:"photos/BangxiangChen.jpg", interests:{zh:"多功能咀嚼机器人 · 食品质构分析",   en:"Versatile Chewing Robot · Food Texture Analysis"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
   { category:"已毕业", name:"D. Bhattacharya", year:{zh:"2020届",en:"Class of 2020"}, interests:{zh:"软体食道机器人 · 支架测试与吞咽",   en:"Soft Robotic Esophagus · Stent Testing & Swallowing"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
   { category:"已毕业", name:"A.B. Hashem",     year:{zh:"2020届",en:"Class of 2020"}, interests:{zh:"仿生软体胃机器人 · 波纹管驱动",     en:"Bio-inspired Soft Stomach Robot · Bellows-driven"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
   { category:"已毕业", name:"D. Yu",           year:{zh:"2019届",en:"Class of 2019"}, interests:{zh:"气动软体机器人 · 胃蠕动模拟",       en:"Pneumatic Soft Robot · Gastric Motility"}, note:{zh:"奥克兰大学",en:"University of Auckland"} },
@@ -328,10 +356,17 @@ function linkEl(url,type,label){
   return `<a href="${esc(url)}" target="_blank" rel="noopener" aria-label="${l}" title="${l}">${ICONS[type]}</a>`;
 }
 
+function avatarError(img){
+  const d=document.createElement("div");
+  d.className="avatar"; d.setAttribute("aria-hidden","true");
+  d.textContent=img.getAttribute("data-initial")||"·";
+  img.replaceWith(d);
+}
+
 function avatarEl(m){
-  const photo = t(m.photo);
-  if(photo){ return `<img class="avatar" src="${esc(photo)}" alt="${esc(t(m.name))}" loading="lazy">`; }
   const initial = (t(m.name)||"").trim().charAt(0) || "·";
+  const photo = t(m.photo);
+  if(photo){ return `<img class="avatar" src="${esc(photo)}" alt="${esc(t(m.name))}" loading="lazy" data-initial="${esc(initial)}" onerror="avatarError(this)">`; }
   return `<div class="avatar" aria-hidden="true">${esc(initial)}</div>`;
 }
 
